@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Orden_Compra__c</fullName>
+    <label>Orden de Compra</label>
+    <type>MasterDetail</type>
+    <referenceTo>Orden_Compra__c</referenceTo>
+    <relationshipLabel>Partidas de Orden de Compra</relationshipLabel>
+    <relationshipName>Partidas_Orden_Compra</relationshipName>
+    <relationshipOrder>0</relationshipOrder>
+    <reparentableMasterDetail>false</reparentableMasterDetail>
+    <writeRequiresMasterRead>false</writeRequiresMasterRead>
+</CustomField>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Partida_Cotizacion__c</fullName>
+    <label>Partida de Cotizacion</label>
+    <type>Lookup</type>
+    <referenceTo>Partida_Cotizacion__c</referenceTo>
+    <relationshipLabel>Partidas de Orden de Compra</relationshipLabel>
+    <relationshipName>Partidas_Orden_Compra</relationshipName>
+    <required>false</required>
+</CustomField>

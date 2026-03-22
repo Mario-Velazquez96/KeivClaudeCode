@@ -1,0 +1,38 @@
+<template>
+    <lightning-card title="Entregas (Remisiones)" icon-name="standard:shipment">
+        <div slot="actions">
+            <lightning-button label="Nueva Remision" onclick={handleNewRemision} variant="brand"></lightning-button>
+        </div>
+        <div class="slds-var-p-around_medium">
+            <template if:true={remisiones.data}>
+                <template if:true={hasRemisiones}>
+                    <template for:each={remisiones.data} for:item="rem">
+                        <div key={rem.Id} class="slds-box slds-var-m-bottom_small">
+                            <div class="slds-grid slds-grid_align-spread">
+                                <div class="slds-col">
+                                    <p class="slds-text-heading_small">{rem.Name}</p>
+                                    <p class="slds-text-body_small">Fecha: {rem.Fecha__c} | Estatus: {rem.Estatus_Entrega__c}</p>
+                                    <template if:true={rem.Firmada__c}>
+                                        <lightning-badge label="Firmada" class="slds-var-m-top_xx-small"></lightning-badge>
+                                    </template>
+                                </div>
+                            </div>
+                            <template if:true={rem.Partidas_Remision__r}>
+                                <ul class="slds-list_dotted slds-var-m-top_small">
+                                    <template for:each={rem.Partidas_Remision__r} for:item="pr">
+                                        <li key={pr.Id}>
+                                            {pr.Partida_Cotizacion__r.Descripcion__c}: {pr.Cantidad_Entregada__c} unidades
+                                        </li>
+                                    </template>
+                                </ul>
+                            </template>
+                        </div>
+                    </template>
+                </template>
+                <template if:false={hasRemisiones}>
+                    <p>No hay remisiones registradas.</p>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+</template>

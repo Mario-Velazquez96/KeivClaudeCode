@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Credito_Vencido__c</fullName>
+    <label>Credito Vencido</label>
+    <type>Checkbox</type>
+    <formula>AND(TEXT(Condicion_Pago__c) = "Credito", NOT(ISBLANK(Fecha_Vencimiento_Credito__c)), Fecha_Vencimiento_Credito__c &lt; TODAY(), Saldo_Pendiente__c &gt; 0)</formula>
+</CustomField>

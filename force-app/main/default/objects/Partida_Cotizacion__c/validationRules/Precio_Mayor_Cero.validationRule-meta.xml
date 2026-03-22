@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Precio_Mayor_Cero</fullName>
+    <active>true</active>
+    <errorConditionFormula>Precio_Unitario__c &lt;= 0</errorConditionFormula>
+    <errorMessage>El precio unitario debe ser mayor a cero.</errorMessage>
+</ValidationRule>

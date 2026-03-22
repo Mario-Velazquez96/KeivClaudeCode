@@ -1,0 +1,22 @@
+<template>
+    <lightning-card title="Reparto de Utilidad - Socios" icon-name="standard:partners">
+        <div slot="actions">
+            <lightning-button label="Agregar Aportacion" onclick={handleNewAportacion} variant="brand"></lightning-button>
+        </div>
+        <div class="slds-var-p-around_medium">
+            <template if:true={aportaciones.data}>
+                <template if:true={hasAportaciones}>
+                    <lightning-datatable
+                        key-field="Id"
+                        data={aportaciones.data}
+                        columns={columns}
+                        hide-checkbox-column>
+                    </lightning-datatable>
+                </template>
+                <template if:false={hasAportaciones}>
+                    <p>No hay aportaciones registradas para esta cotizacion.</p>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+</template>

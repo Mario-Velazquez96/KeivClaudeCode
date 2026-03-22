@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Fecha_Vencimiento_Credito__c</fullName>
+    <label>Fecha de Vencimiento de Credito</label>
+    <type>Date</type>
+    <formula>IF(AND(NOT(ISBLANK(Fecha_Entrega_Completa__c)), TEXT(Condicion_Pago__c) = "Credito", Dias_Credito__c &gt; 0), Fecha_Entrega_Completa__c + Dias_Credito__c, NULL)</formula>
+</CustomField>

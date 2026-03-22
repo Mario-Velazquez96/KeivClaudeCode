@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Proveedor__c</fullName>
+    <label>Proveedor</label>
+    <type>Lookup</type>
+    <referenceTo>Proveedor__c</referenceTo>
+    <relationshipLabel>Partidas de Cotizacion</relationshipLabel>
+    <relationshipName>Partidas_Cotizacion</relationshipName>
+    <required>false</required>
+</CustomField>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Intermediario</label>
+    <formFactors>Large</formFactors>
+    <navType>Standard</navType>
+    <uiType>Lightning</uiType>
+    <tabs>standard-home</tabs>
+    <tabs>standard-Account</tabs>
+    <tabs>Cotizacion__c</tabs>
+    <tabs>Proveedor__c</tabs>
+    <tabs>Orden_Compra__c</tabs>
+    <tabs>Remision__c</tabs>
+    <tabs>Pago__c</tabs>
+    <tabs>standard-report</tabs>
+    <tabs>standard-Dashboard</tabs>
+</CustomApplication>

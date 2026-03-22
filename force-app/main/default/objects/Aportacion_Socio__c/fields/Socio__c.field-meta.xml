@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Socio__c</fullName>
+    <label>Socio</label>
+    <type>Picklist</type>
+    <required>true</required>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value><fullName>Mario</fullName><default>false</default><label>Mario</label></value>
+            <value><fullName>Elliot</fullName><default>false</default><label>Elliot</label></value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

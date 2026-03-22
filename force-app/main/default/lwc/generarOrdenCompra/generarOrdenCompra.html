@@ -1,0 +1,28 @@
+<template>
+    <lightning-card title="Generar Ordenes de Compra" icon-name="standard:orders">
+        <div class="slds-var-p-around_medium">
+            <template if:true={proveedores.data}>
+                <template if:true={hasProveedores}>
+                    <template for:each={proveedores.data} for:item="prov">
+                        <div key={prov.proveedorId} class="slds-box slds-var-m-bottom_small">
+                            <p class="slds-text-heading_small">{prov.proveedorName}</p>
+                            <p class="slds-text-body_small">Partidas: {prov.partidas.length} | Total: ${prov.total}</p>
+                        </div>
+                    </template>
+                    <lightning-button
+                        label="Generar Ordenes de Compra"
+                        variant="brand"
+                        onclick={handleGenerar}
+                        disabled={isGenerating}>
+                    </lightning-button>
+                </template>
+                <template if:false={hasProveedores}>
+                    <p class="slds-text-body_regular">No hay proveedores que requieran orden de compra.</p>
+                </template>
+            </template>
+            <template if:true={proveedores.error}>
+                <p class="slds-text-color_error">Error al cargar proveedores.</p>
+            </template>
+        </div>
+    </lightning-card>
+</template>
