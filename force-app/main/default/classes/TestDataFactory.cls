@@ -49,8 +49,7 @@ public class TestDataFactory {
     public static Remision__c createRemision(Id cotizacionId) {
         Remision__c rem = new Remision__c(
             Cotizacion__c = cotizacionId,
-            Fecha__c = Date.today(),
-            Estatus_Entrega__c = 'Pendiente'
+            Fecha__c = Date.today()
         );
         insert rem;
         return rem;

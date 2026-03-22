@@ -273,11 +273,6 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <field>Remision__c.Estatus_Entrega__c</field>
-        <editable>true</editable>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
         <field>Remision__c.Firmada__c</field>
         <editable>true</editable>
         <readable>true</readable>

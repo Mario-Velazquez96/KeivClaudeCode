@@ -34,4 +34,70 @@
             </div>
         </template>
     </lightning-card>
+
+    <!-- Modal Nueva Partida -->
+    <template if:true={showNewModal}>
+        <section class="slds-modal slds-fade-in-open" role="dialog">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={handleNewModalClose}>
+                        <lightning-icon icon-name="utility:close" size="small" variant="inverse"></lightning-icon>
+                    </button>
+                    <h2 class="slds-text-heading_medium">Nueva Partida</h2>
+                </header>
+                <div class="slds-modal__content slds-var-p-around_medium">
+                    <lightning-record-edit-form
+                        object-api-name="Partida_Cotizacion__c"
+                        onsuccess={handleNewSuccess}>
+                        <lightning-input-field field-name="Cotizacion__c" value={recordId} class="slds-hide"></lightning-input-field>
+                        <lightning-input-field field-name="Descripcion__c"></lightning-input-field>
+                        <lightning-input-field field-name="Proveedor__c"></lightning-input-field>
+                        <lightning-input-field field-name="Cantidad__c"></lightning-input-field>
+                        <lightning-input-field field-name="Unidad__c"></lightning-input-field>
+                        <lightning-input-field field-name="Costo_Unitario__c"></lightning-input-field>
+                        <lightning-input-field field-name="Precio_Unitario__c"></lightning-input-field>
+                        <lightning-input-field field-name="Estatus_Proveedor__c"></lightning-input-field>
+                        <div class="slds-var-m-top_medium slds-text-align_right">
+                            <lightning-button label="Cancelar" onclick={handleNewModalClose} class="slds-var-m-right_small"></lightning-button>
+                            <lightning-button label="Guardar" type="submit" variant="brand"></lightning-button>
+                        </div>
+                    </lightning-record-edit-form>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <!-- Modal Editar Partida -->
+    <template if:true={showEditModal}>
+        <section class="slds-modal slds-fade-in-open" role="dialog">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={handleEditModalClose}>
+                        <lightning-icon icon-name="utility:close" size="small" variant="inverse"></lightning-icon>
+                    </button>
+                    <h2 class="slds-text-heading_medium">Editar Partida</h2>
+                </header>
+                <div class="slds-modal__content slds-var-p-around_medium">
+                    <lightning-record-edit-form
+                        object-api-name="Partida_Cotizacion__c"
+                        record-id={editRecordId}
+                        onsuccess={handleEditSuccess}>
+                        <lightning-input-field field-name="Descripcion__c"></lightning-input-field>
+                        <lightning-input-field field-name="Proveedor__c"></lightning-input-field>
+                        <lightning-input-field field-name="Cantidad__c"></lightning-input-field>
+                        <lightning-input-field field-name="Unidad__c"></lightning-input-field>
+                        <lightning-input-field field-name="Costo_Unitario__c"></lightning-input-field>
+                        <lightning-input-field field-name="Precio_Unitario__c"></lightning-input-field>
+                        <lightning-input-field field-name="Estatus_Proveedor__c"></lightning-input-field>
+                        <div class="slds-var-m-top_medium slds-text-align_right">
+                            <lightning-button label="Cancelar" onclick={handleEditModalClose} class="slds-var-m-right_small"></lightning-button>
+                            <lightning-button label="Guardar" type="submit" variant="brand"></lightning-button>
+                        </div>
+                    </lightning-record-edit-form>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
 </template>

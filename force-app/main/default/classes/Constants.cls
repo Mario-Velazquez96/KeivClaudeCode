@@ -22,11 +22,6 @@ public class Constants {
     public static final String PROV_EN_TRANSITO = 'En Transito';
     public static final String PROV_RECIBIDO = 'Recibido';
 
-    // Estatus Entrega
-    public static final String ENTREGA_PENDIENTE = 'Pendiente';
-    public static final String ENTREGA_EN_TRANSITO = 'En Transito';
-    public static final String ENTREGA_ENTREGADA = 'Entregada';
-
     // Estatus Orden de Compra
     public static final String OC_BORRADOR = 'Borrador';
     public static final String OC_ENVIADA = 'Enviada';

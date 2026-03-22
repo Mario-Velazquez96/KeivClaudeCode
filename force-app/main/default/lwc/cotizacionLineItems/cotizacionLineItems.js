@@ -1,6 +1,6 @@
 import { LightningElement, api, wire } from 'lwc';
 import { refreshApex } from '@salesforce/apex';
-import { NavigationMixin } from 'lightning/navigation';
+import { getRecordNotifyChange } from 'lightning/uiRecordApi';
 import getPartidasCotizacion from '@salesforce/apex/CotizacionController.getPartidasCotizacion';
 import deletePartida from '@salesforce/apex/CotizacionController.deletePartida';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
@@ -27,9 +27,12 @@ const COLUMNS = [
     }
 ];
 
-export default class CotizacionLineItems extends NavigationMixin(LightningElement) {
+export default class CotizacionLineItems extends LightningElement {
     @api recordId;
     columns = COLUMNS;
+    showNewModal = false;
+    showEditModal = false;
+    editRecordId = null;
 
     @wire(getPartidasCotizacion, { cotizacionId: '$recordId' })
     partidas;
@@ -59,16 +62,22 @@ export default class CotizacionLineItems extends NavigationMixin(LightningElemen
     }
 
     handleNewPartida() {
-        this[NavigationMixin.Navigate]({
-            type: 'standard__objectPage',
-            attributes: {
-                objectApiName: 'Partida_Cotizacion__c',
-                actionName: 'new'
-            },
-            state: {
-                defaultFieldValues: `Cotizacion__c=${this.recordId}`
-            }
-        });
+        this.showNewModal = true;
+    }
+
+    handleNewModalClose() {
+        this.showNewModal = false;
+    }
+
+    async handleNewSuccess() {
+        this.showNewModal = false;
+        this.dispatchEvent(new ShowToastEvent({
+            title: 'Creado',
+            message: 'Partida creada correctamente.',
+            variant: 'success'
+        }));
+        await refreshApex(this.partidas);
+        getRecordNotifyChange([{ recordId: this.recordId }]);
     }
 
     handleRowAction(event) {
@@ -76,16 +85,28 @@ export default class CotizacionLineItems extends NavigationMixin(LightningElemen
         const row = event.detail.row;
 
         if (action.name === 'edit') {
-            this[NavigationMixin.Navigate]({
-                type: 'standard__recordPage',
-                attributes: {
-                    recordId: row.Id,
-                    actionName: 'edit'
-                }
-            });
+            this.editRecordId = row.Id;
+            this.showEditModal = true;
         } else if (action.name === 'delete') {
             this.handleDelete(row.Id);
         }
+    }
+
+    handleEditModalClose() {
+        this.showEditModal = false;
+        this.editRecordId = null;
+    }
+
+    async handleEditSuccess() {
+        this.showEditModal = false;
+        this.editRecordId = null;
+        this.dispatchEvent(new ShowToastEvent({
+            title: 'Actualizado',
+            message: 'Partida actualizada correctamente.',
+            variant: 'success'
+        }));
+        await refreshApex(this.partidas);
+        getRecordNotifyChange([{ recordId: this.recordId }]);
     }
 
     async handleDelete(partidaId) {
@@ -97,6 +118,7 @@ export default class CotizacionLineItems extends NavigationMixin(LightningElemen
                 variant: 'success'
             }));
             await refreshApex(this.partidas);
+            getRecordNotifyChange([{ recordId: this.recordId }]);
         } catch (error) {
             this.dispatchEvent(new ShowToastEvent({
                 title: 'Error',

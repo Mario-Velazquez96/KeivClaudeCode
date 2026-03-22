@@ -1,38 +1,135 @@
 <template>
     <lightning-card title="Entregas (Remisiones)" icon-name="standard:shipment">
         <div slot="actions">
-            <lightning-button label="Nueva Remision" onclick={handleNewRemision} variant="brand"></lightning-button>
+            <template if:true={todasEntregadas}>
+                <lightning-badge label="Entrega Completa" class="slds-var-m-right_small slds-badge_inverse"></lightning-badge>
+            </template>
+            <lightning-button
+                label="Nueva Remision"
+                onclick={handleNewRemision}
+                variant="brand"
+                disabled={todasEntregadas}>
+            </lightning-button>
         </div>
         <div class="slds-var-p-around_medium">
-            <template if:true={remisiones.data}>
-                <template if:true={hasRemisiones}>
-                    <template for:each={remisiones.data} for:item="rem">
-                        <div key={rem.Id} class="slds-box slds-var-m-bottom_small">
-                            <div class="slds-grid slds-grid_align-spread">
-                                <div class="slds-col">
-                                    <p class="slds-text-heading_small">{rem.Name}</p>
-                                    <p class="slds-text-body_small">Fecha: {rem.Fecha__c} | Estatus: {rem.Estatus_Entrega__c}</p>
-                                    <template if:true={rem.Firmada__c}>
-                                        <lightning-badge label="Firmada" class="slds-var-m-top_xx-small"></lightning-badge>
-                                    </template>
-                                </div>
+            <!-- All delivered message -->
+            <template if:true={todasEntregadas}>
+                <div class="slds-box slds-theme_success slds-var-m-bottom_small">
+                    <p>Todas las partidas han sido entregadas completamente.</p>
+                </div>
+            </template>
+
+            <!-- Existing remisiones list -->
+            <template if:true={hasRemisiones}>
+                <template for:each={remisiones} for:item="rem">
+                    <div key={rem.Id} class="slds-box slds-var-m-bottom_small">
+                        <div class="slds-grid slds-grid_align-spread">
+                            <div class="slds-col">
+                                <p class="slds-text-heading_small">{rem.Name}</p>
+                                <p class="slds-text-body_small">Fecha: {rem.Fecha__c}</p>
+                                <template if:true={rem.Firmada__c}>
+                                    <lightning-badge label="Firmada" class="slds-var-m-top_xx-small"></lightning-badge>
+                                </template>
                             </div>
-                            <template if:true={rem.Partidas_Remision__r}>
-                                <ul class="slds-list_dotted slds-var-m-top_small">
-                                    <template for:each={rem.Partidas_Remision__r} for:item="pr">
-                                        <li key={pr.Id}>
-                                            {pr.Partida_Cotizacion__r.Descripcion__c}: {pr.Cantidad_Entregada__c} unidades
-                                        </li>
-                                    </template>
-                                </ul>
-                            </template>
                         </div>
-                    </template>
+                        <template if:true={rem.Partidas_Remision__r}>
+                            <ul class="slds-list_dotted slds-var-m-top_small">
+                                <template for:each={rem.Partidas_Remision__r} for:item="pr">
+                                    <li key={pr.Id}>
+                                        {pr.Partida_Cotizacion__r.Descripcion__c}: {pr.Cantidad_Entregada__c} unidades
+                                    </li>
+                                </template>
+                            </ul>
+                        </template>
+                    </div>
                 </template>
-                <template if:false={hasRemisiones}>
-                    <p>No hay remisiones registradas.</p>
-                </template>
+            </template>
+            <template if:false={hasRemisiones}>
+                <p>No hay remisiones registradas.</p>
             </template>
         </div>
     </lightning-card>
+
+    <!-- Modal: Nueva Remision -->
+    <template if:true={showNewModal}>
+        <section class="slds-modal slds-fade-in-open" role="dialog" aria-modal="true">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={handleCloseModal}>
+                        <lightning-icon icon-name="utility:close" size="small" variant="inverse"></lightning-icon>
+                    </button>
+                    <h2 class="slds-text-heading_medium">Nueva Remision</h2>
+                    <p class="slds-text-body_small slds-var-m-top_xx-small">
+                        Seleccione las partidas y cantidades a entregar
+                    </p>
+                </header>
+                <div class="slds-modal__content slds-var-p-around_medium" style="min-height: 200px;">
+                    <template if:true={hasPartidasPendientes}>
+                        <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th scope="col"><div class="slds-truncate">Partida</div></th>
+                                    <th scope="col"><div class="slds-truncate">Descripcion</div></th>
+                                    <th scope="col"><div class="slds-truncate">Cotizada</div></th>
+                                    <th scope="col"><div class="slds-truncate">Entregada</div></th>
+                                    <th scope="col"><div class="slds-truncate">Pendiente</div></th>
+                                    <th scope="col"><div class="slds-truncate">Cantidad a Entregar</div></th>
+                                    <th scope="col"><div class="slds-truncate"></div></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={partidasParaModal} for:item="p">
+                                    <tr key={p.id}>
+                                        <td><div class="slds-truncate">{p.name}</div></td>
+                                        <td><div class="slds-truncate">{p.descripcion}</div></td>
+                                        <td><div class="slds-truncate">{p.cantidad} {p.unidad}</div></td>
+                                        <td><div class="slds-truncate">{p.entregada}</div></td>
+                                        <td><div class="slds-truncate"><strong>{p.pendiente}</strong></div></td>
+                                        <td>
+                                            <lightning-input
+                                                type="number"
+                                                step="0.01"
+                                                min="0"
+                                                max={p.maxCantidad}
+                                                value={p.cantidadSeleccionada}
+                                                data-id={p.id}
+                                                data-max={p.maxCantidad}
+                                                onchange={handleCantidadChange}
+                                                variant="label-hidden">
+                                            </lightning-input>
+                                        </td>
+                                        <td>
+                                            <lightning-button
+                                                label="Todo"
+                                                variant="base"
+                                                data-id={p.id}
+                                                data-max={p.maxCantidad}
+                                                onclick={handleEntregarTodo}
+                                                title="Entregar toda la cantidad pendiente">
+                                            </lightning-button>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </template>
+                    <template if:false={hasPartidasPendientes}>
+                        <p class="slds-text-body_regular slds-align_absolute-center">
+                            No hay partidas pendientes de entrega.
+                        </p>
+                    </template>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button label="Cancelar" onclick={handleCloseModal} class="slds-var-m-right_small"></lightning-button>
+                    <lightning-button
+                        label="Crear Remision"
+                        variant="brand"
+                        onclick={handleCrearRemision}
+                        disabled={isCreateDisabled}>
+                    </lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
 </template>

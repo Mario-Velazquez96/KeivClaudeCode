@@ -1,27 +1,49 @@
 <template>
     <lightning-card title="Generar Ordenes de Compra" icon-name="standard:orders">
         <div class="slds-var-p-around_medium">
-            <template if:true={proveedores.data}>
-                <template if:true={hasProveedores}>
-                    <template for:each={proveedores.data} for:item="prov">
+            <template if:true={estado}>
+                <!-- All partidas already covered -->
+                <template if:true={todasCubiertas}>
+                    <div class="slds-box slds-theme_success slds-var-m-bottom_small">
+                        <p class="slds-text-body_regular">
+                            Todas las partidas ya tienen su orden de compra generada
+                            ({estado.partidasCubiertas}/{estado.totalPartidas} cubiertas).
+                        </p>
+                    </div>
+                    <lightning-button
+                        label="Generar Ordenes de Compra"
+                        variant="brand"
+                        disabled>
+                    </lightning-button>
+                </template>
+
+                <!-- There are pending partidas to generate OCs -->
+                <template if:true={hasProveedoresPendientes}>
+                    <p class="slds-text-body_small slds-var-m-bottom_small">
+                        Partidas pendientes de OC ({estado.partidasCubiertas} de {estado.totalPartidas} ya cubiertas):
+                    </p>
+                    <template for:each={proveedoresPendientes} for:item="prov">
                         <div key={prov.proveedorId} class="slds-box slds-var-m-bottom_small">
                             <p class="slds-text-heading_small">{prov.proveedorName}</p>
-                            <p class="slds-text-body_small">Partidas: {prov.partidas.length} | Total: ${prov.total}</p>
+                            <p class="slds-text-body_small">Partidas nuevas: {prov.partidas.length} | Total: ${prov.total}</p>
                         </div>
                     </template>
                     <lightning-button
                         label="Generar Ordenes de Compra"
                         variant="brand"
                         onclick={handleGenerar}
-                        disabled={isGenerating}>
+                        disabled={isButtonDisabled}>
                     </lightning-button>
                 </template>
-                <template if:false={hasProveedores}>
+
+                <!-- No partidas require OC -->
+                <template if:true={noRequierenOC}>
                     <p class="slds-text-body_regular">No hay proveedores que requieran orden de compra.</p>
                 </template>
             </template>
-            <template if:true={proveedores.error}>
-                <p class="slds-text-color_error">Error al cargar proveedores.</p>
+
+            <template if:true={hasError}>
+                <p class="slds-text-color_error">Error al cargar estado de ordenes de compra.</p>
             </template>
         </div>
     </lightning-card>
